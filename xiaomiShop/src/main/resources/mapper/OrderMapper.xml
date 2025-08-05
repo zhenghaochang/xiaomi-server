@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zhc.mapper.OrderMapper">
+
+
+    <insert id="insertOrder">
+        insert into xiaomi.order (order_id, user_id, goods_id, goods_number, goods_price, order_time, status, goods_name) VALUES
+        <foreach collection="orderList" item="order" separator=",">
+            (#{order.orderId},#{order.userId},#{order.goodsId},#{order.goodsNumber},#{order.goodsPrice},#{order.orderTime},#{order.status},#{order.goodsName})
+        </foreach>
+    </insert>
+    <update id="update">
+        update xiaomi.order
+        <set>
+            <if test="goodsNumber!=null">goods_number = #{goodsNumber}</if>
+            <if test="status!=null">status = #{status}</if>
+        </set>
+        where user_id = #{userId} and order_id = #{orderId}
+    </update>
+</mapper>

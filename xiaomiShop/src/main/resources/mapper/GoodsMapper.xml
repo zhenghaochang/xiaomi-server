@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zhc.mapper.GoodsMapper">
+
+    <select id="findHotGoodsOrderByNum" resultType="com.zhc.entity.vo.GoodsVo">
+        select id,goods_name,goods_advantage,goods_price,goods_price_new,goods_parameter from xiaomi.goods
+        <where>
+            <if test="categoryId != null and categoryId.size() > 0">
+                category_id in
+                <foreach collection="categoryId" separator="," item="id" open="(" close=")">
+                    #{id}
+                </foreach>
+            </if>
+        </where>
+        order by goods_num DESC
+        limit 7
+    </select>
+    <select id="findGoodsOrderByNum" resultType="com.zhc.entity.vo.GoodsVo">
+        select id,goods_name,goods_advantage,goods_price,goods_price_new,goods_parameter from xiaomi.goods where category_id = #{categoryId}
+        order by goods_num DESC
+        limit 7
+    </select>
+    <select id="getPageGoods" resultType="com.zhc.entity.vo.GoodsVo">
+        select id,goods_name,goods_advantage,goods_price,goods_price_new,goods_parameter from xiaomi.goods
+        <where>
+            <if test="categoryId != null and categoryId != 0">and category_id = #{categoryId}</if>
+            <if test="goodsName != null and goodsName != ''">and goods_name like concat("%",#{goodsName},"%")</if>
+        </where>
+    </select>
+    <select id="findByIds" resultType="com.zhc.entity.Goods">
+        select * from xiaomi.goods where id in
+        <foreach collection="goodsIds" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+</mapper>
